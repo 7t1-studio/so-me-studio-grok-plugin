@@ -2,6 +2,8 @@
 
 Checked 11 September 2026. The public production checks in [live-checks.json](live-checks.json) passed. They verify discovery and rejection of unauthenticated account access. They do not establish a successful Cursor or Grok Bot login.
 
+**Follow-up verification:** a live registration request at 10:15 UTC on September 11 returned HTTP 400, `redirect_uri not allowed`, for the exact documented Cursor web callback. No client, secret, or authenticated session was created. This is now a confirmed production blocker rather than an unknown environment setting. See [callback-verification.json](callback-verification.json).
+
 ## Connection contract
 
 The plugin uses Streamable HTTP at `https://api.so-me.studio/mcp/posting`. OAuth discovery advertises authorization code flow with PKCE `S256`, refresh tokens, scope `mcp`, dynamic client registration (DCR), and client ID metadata documents (CIMD). The advertised token endpoint authentication methods are `none` and `client_secret_post`. A public PKCE client can use `none` without packaging a secret.
@@ -19,13 +21,13 @@ The plugin uses Streamable HTTP at `https://api.so-me.studio/mcp/posting`. OAuth
 
 Cursor documents two fixed callbacks: `https://www.cursor.com/agents/mcp/oauth/callback` for web and Cursor Agents, and `http://localhost:8787/callback` for the desktop app. Register the callbacks for the surfaces being tested. [Cursor MCP documentation](https://cursor.com/docs/mcp#static-redirect-url)
 
-The inspected backend source, `apps/backend/src/api/mcp/oauth/mcp-oauth.service.ts`, accepts the desktop URI through its loopback rule. Its default DCR callback allowlist does **not** include the Cursor web URI. An operator must ensure that the exact web URI is included in the comma-separated `MCP_OAUTH_REDIRECT_URIS` configuration, preserving any existing entries:
+The inspected backend source, `apps/backend/src/api/mcp/oauth/mcp-oauth.service.ts`, accepts the desktop URI through its loopback rule. Its default DCR callback allowlist does **not** include the Cursor web URI. The prepared backend fix permits this exact URI during registration:
 
 ```text
 https://www.cursor.com/agents/mcp/oauth/callback
 ```
 
-This is a source finding. The deployed environment configuration was not inspected or changed, and no registration request was made. The URI might already be configured in production. Validate the actual Grok Bot authorization request before declaring the callback ready; do not add guessed callback variants or broad domain wildcards.
+The subsequent live registration test confirms that production currently rejects this URI. The prepared change retains registered-client validation: an unknown client or a client registered with another callback cannot authorize through the Cursor callback. The focused OAuth suite passes 63 tests, including 11 spoofed or modified callback variants. The fix is not deployed yet. Do not put this callback into a static-client shortcut or add guessed variants or broad domain wildcards.
 
 The server also supports CIMD. Successful metadata discovery alone does not show which client-registration flow Grok Bot uses or prove that either flow completes.
 

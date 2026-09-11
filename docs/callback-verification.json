@@ -1,0 +1,23 @@
+{
+  "checkedAtUtc": "2026-09-11T10:15:41.352Z",
+  "endpoint": "https://api.so-me.studio/oauth/register",
+  "method": "POST",
+  "callback": "https://www.cursor.com/agents/mcp/oauth/callback",
+  "tokenEndpointAuthMethod": "none",
+  "httpStatus": 400,
+  "error": "redirect_uri not allowed: https://www.cursor.com/agents/mcp/oauth/callback",
+  "clientRegistered": false,
+  "secretIssued": false,
+  "authenticatedSessionEstablished": false,
+  "socialActionsPerformed": false,
+  "conclusion": "Production currently rejects registration of the documented Cursor/Grok Bot web callback. A callback fix must be deployed before repeating this test.",
+  "secondaryEvidence": {
+    "deploymentConfigurationMirrorContainsExtraRedirectSetting": false,
+    "runtimeSshReadSucceeded": false
+  },
+  "clientTest": {
+    "cursorBrowserAgents": "Account UI requires a Pro account to start Cloud Agents; no task started.",
+    "grokBot": "Grok Bot is not installed on the test computer. Official Windows installer 0.47.0 was downloaded and its Anysphere, Inc. Authenticode signature verified. Installation and authenticated client execution are pending.",
+    "grokChat": "Custom-connector form is available; no connector added or authenticated in this test."
+  }
+}
