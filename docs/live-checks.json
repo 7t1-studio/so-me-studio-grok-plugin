@@ -1,0 +1,99 @@
+{
+  "checkedAtUtc": "2026-09-11T09:56:18Z",
+  "scope": "Public protocol and authentication-discovery checks only",
+  "endpoint": "https://api.so-me.studio/mcp/posting",
+  "credentialsUsed": false,
+  "oauthClientsRegistered": false,
+  "oauthSessionEstablished": false,
+  "socialActionsPerformed": false,
+  "checks": {
+    "health": { "status": 200, "result": "ok" },
+    "protectedResourceMetadata": {
+      "url": "https://api.so-me.studio/.well-known/oauth-protected-resource/mcp/posting",
+      "status": 200,
+      "resource": "https://api.so-me.studio/mcp/posting",
+      "authorizationServers": ["https://api.so-me.studio"],
+      "scopes": ["mcp"]
+    },
+    "authorizationServerMetadata": {
+      "url": "https://api.so-me.studio/.well-known/oauth-authorization-server",
+      "status": 200,
+      "issuer": "https://api.so-me.studio",
+      "authorizationEndpoint": "https://api.so-me.studio/oauth/authorize",
+      "tokenEndpoint": "https://api.so-me.studio/oauth/token",
+      "registrationEndpoint": "https://api.so-me.studio/oauth/register",
+      "responseTypes": ["code"],
+      "grantTypes": ["authorization_code", "refresh_token"],
+      "pkceMethods": ["S256"],
+      "tokenEndpointAuthMethods": ["none", "client_secret_post"],
+      "clientIdMetadataDocumentSupported": true
+    },
+    "anonymousToolDiscovery": {
+      "status": 200,
+      "responseFormat": "text/event-stream",
+      "toolCount": 30,
+      "allToolsDeclareOAuthScopeMcp": true,
+      "allToolsMirrorSecuritySchemesInMeta": true,
+      "wwwAuthenticateHeaderPresent": true,
+      "toolNames": [
+        "validate_post_media",
+        "list_posts",
+        "get_post",
+        "create_post",
+        "update_post",
+        "schedule_post",
+        "unschedule_post",
+        "delete_post",
+        "retry_post",
+        "get_calendar_posts",
+        "list_drafts",
+        "get_draft",
+        "create_draft",
+        "update_draft",
+        "delete_draft",
+        "convert_draft",
+        "list_accounts",
+        "get_account",
+        "list_media",
+        "search_media",
+        "get_media_file",
+        "list_media_folders",
+        "presign_media_upload",
+        "list_pinterest_boards",
+        "list_reddit_subreddits",
+        "list_reddit_flairs",
+        "list_gmb_locations",
+        "list_discord_channels",
+        "list_slack_channels",
+        "get_tiktok_creator_info"
+      ]
+    },
+    "anonymousListAccounts": {
+      "status": 200,
+      "isError": true,
+      "accountStructuredContentAbsent": true,
+      "toolResultAuthenticationChallengePresent": true,
+      "challengeError": "invalid_token",
+      "challengeResourceMetadata": "https://api.so-me.studio/.well-known/oauth-protected-resource/mcp/posting"
+    },
+    "statelessMethods": { "getStatus": 405, "deleteStatus": 405 }
+  },
+  "sourceReview": {
+    "cursorDocumentation": "https://cursor.com/docs/mcp#static-redirect-url",
+    "documentedWebCallback": "https://www.cursor.com/agents/mcp/oauth/callback",
+    "documentedDesktopCallback": "http://localhost:8787/callback",
+    "webCallbackInBackendDefaultDcrAllowlist": false,
+    "desktopCallbackAcceptedByBackendLoopbackRule": true,
+    "deployedExtraRedirectConfigurationInspected": false,
+    "postingResourceParameterRequiredForPostingAudience": true
+  },
+  "notVerified": [
+    "Grok Bot or Cursor plugin loading and native authentication prompt",
+    "Deployed allowance of the Cursor web callback through environment configuration",
+    "Dynamic client registration, actual callback, consent, token exchange or refresh",
+    "Grok Bot sending the posting resource indicator in its OAuth request",
+    "Authenticated account lookup in Grok Bot",
+    "Grok Bot attachment access and HTTP PUT transfer capability",
+    "Authenticated draft, scheduling, cancellation or publication behavior"
+  ]
+}

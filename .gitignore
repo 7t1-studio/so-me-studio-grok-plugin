@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+*upload-plan*.json
+*.pem
+*.key
+dist/
+.DS_Store
+Thumbs.db

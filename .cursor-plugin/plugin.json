@@ -1,0 +1,23 @@
+{
+  "name": "so-me-studio",
+  "version": "1.0.0",
+  "description": "Upload images and videos, then draft, publish, and schedule social posts with So-me Studio in Grok Bot.",
+  "author": {
+    "name": "7t1 Studio / So-me Studio",
+    "email": "support@so-me.studio"
+  },
+  "homepage": "https://docs.so-me.studio/mcp/overview",
+  "repository": "https://github.com/7t1-studio/so-me-studio-grok-plugin",
+  "license": "MIT",
+  "keywords": [
+    "so-me-studio",
+    "social-media",
+    "posting",
+    "scheduling",
+    "drafts",
+    "grok-bot"
+  ],
+  "logo": "assets/icon.png",
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
+}

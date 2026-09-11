@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "so-me-studio": {
+      "url": "https://api.so-me.studio/mcp/posting"
+    }
+  }
+}
