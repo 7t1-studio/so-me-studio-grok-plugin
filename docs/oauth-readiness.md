@@ -27,7 +27,7 @@ The inspected backend source, `apps/backend/src/api/mcp/oauth/mcp-oauth.service.
 https://www.cursor.com/agents/mcp/oauth/callback
 ```
 
-The subsequent live registration test confirms that production currently rejects this URI. The prepared change retains registered-client validation: an unknown client or a client registered with another callback cannot authorize through the Cursor callback. The focused OAuth suite passes 63 tests, including 11 spoofed or modified callback variants. The fix is not deployed yet. Do not put this callback into a static-client shortcut or add guessed variants or broad domain wildcards.
+The subsequent live registration test confirms that production currently rejects this URI. The prepared change retains registered-client validation: an unknown client or a client registered with another callback cannot authorize through the Cursor callback. The focused OAuth suite passes 63 tests, including 11 spoofed or modified callback variants. Both backend release-check jobs also passed on the exact fix commit, covering unit and database tests, TypeScript, lint, website checks, and the production image smoke test. The fix is not deployed yet. Do not put this callback into a static-client shortcut or add guessed variants or broad domain wildcards.
 
 The server also supports CIMD. Successful metadata discovery alone does not show which client-registration flow Grok Bot uses or prove that either flow completes.
 
