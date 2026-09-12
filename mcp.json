@@ -1,7 +1,10 @@
 {
   "mcpServers": {
     "so-me-studio": {
-      "url": "https://api.so-me.studio/mcp/posting"
+      "url": "https://api.so-me.studio/mcp/posting",
+      "headers": {
+        "X-MCP-Auth-Mode": "oauth"
+      }
     }
   }
 }

@@ -16,6 +16,10 @@ from urllib.parse import unquote, urlsplit
 
 
 ENDPOINT = "https://api.so-me.studio/mcp/posting"
+# The posting endpoint returns an HTTP 401 OAuth challenge only when the client
+# announces this non-secret mode header, which is what opens Grok Bot's native
+# OAuth flow. It carries no credential and must stay exactly this name/value.
+AUTH_MODE_HEADERS = {"X-MCP-Auth-Mode": "oauth"}
 FIELD_TYPES = {
     "name": (str,), "description": (str,), "version": (str,),
     "author": (dict,), "homepage": (str,), "repository": (str,),
@@ -141,10 +145,13 @@ def validate_mcp(config):
     name, server = next(iter(servers.items()))
     require(isinstance(name, str) and bool(name), "MCP server name must be nonempty")
     require(isinstance(server, dict), "MCP server config must be an object")
-    require(set(server) <= {"url", "type"},
-            "MCP server must not bundle headers, credentials, environment variables or commands")
+    require(set(server) <= {"url", "type", "headers"},
+            "MCP server must not bundle credentials, environment variables or commands")
     require(server.get("url") == ENDPOINT, "MCP server must use the approved So-me Studio posting endpoint")
     require(server.get("type", "http") == "http", "MCP server transport must be HTTP")
+    require(server.get("headers") == AUTH_MODE_HEADERS,
+            "MCP server must send exactly the non-secret OAuth mode header "
+            + json.dumps(AUTH_MODE_HEADERS))
 
 
 def validate(root):

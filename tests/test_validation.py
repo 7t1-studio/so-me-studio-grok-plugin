@@ -20,7 +20,8 @@ class ValidationTests(unittest.TestCase):
         self.root = Path(self.directory.name).resolve()
         self.manifest = {"name": "test-plugin", "description": "A test plugin.", "version": "1.0.0",
                          "logo": "assets/logo.svg", "skills": "skills", "mcpServers": "mcp.json"}
-        self.mcp = {"mcpServers": {"so-me-studio": {"url": validator.ENDPOINT}}}
+        self.mcp = {"mcpServers": {"so-me-studio": {"url": validator.ENDPOINT,
+                                                   "headers": dict(validator.AUTH_MODE_HEADERS)}}}
         self.write(".cursor-plugin/plugin.json", json.dumps(self.manifest))
         self.write("mcp.json", json.dumps(self.mcp))
         self.write("assets/logo.svg", '<svg xmlns="http://www.w3.org/2000/svg"/>')
@@ -79,20 +80,37 @@ class ValidationTests(unittest.TestCase):
         self.assertEqual(validator.validate(self.root)["skills"], 1)
 
     def test_mcp_rejects_different_endpoints_commands_and_secrets(self):
+        auth_mode = dict(validator.AUTH_MODE_HEADERS)
         variants = [
-            {"url": "http://api.so-me.studio/mcp/posting"},
-            {"url": validator.ENDPOINT + "?token=private"},
-            {"url": "https://other.example.test/mcp"},
+            {"url": "http://api.so-me.studio/mcp/posting", "headers": dict(auth_mode)},
+            {"url": validator.ENDPOINT + "?token=private", "headers": dict(auth_mode)},
+            {"url": "https://other.example.test/mcp", "headers": dict(auth_mode)},
             {"url": validator.ENDPOINT, "headers": {"Authorization": "Bearer private"}},
-            {"url": validator.ENDPOINT, "command": "python"},
-            {"url": validator.ENDPOINT, "env": {"TOKEN": "private"}},
-            {"url": validator.ENDPOINT, "type": "stdio"},
+            {"url": validator.ENDPOINT, "headers": dict(auth_mode, Authorization="Bearer private")},
+            {"url": validator.ENDPOINT, "headers": {"X-API-Key": "sk_live_private"}},
+            {"url": validator.ENDPOINT, "headers": {"X-MCP-Auth-Mode": "api-key"}},
+            {"url": validator.ENDPOINT, "headers": {}},
+            {"url": validator.ENDPOINT},
+            {"url": validator.ENDPOINT, "headers": dict(auth_mode), "command": "python"},
+            {"url": validator.ENDPOINT, "headers": dict(auth_mode), "env": {"TOKEN": "private"}},
+            {"url": validator.ENDPOINT, "headers": dict(auth_mode), "type": "stdio"},
         ]
         for server in variants:
             with self.subTest(keys=list(server)):
                 self.write("mcp.json", json.dumps({"mcpServers": {"so-me-studio": server}}))
                 with self.assertRaises(validator.ValidationError):
                     validator.validate(self.root)
+
+    def test_mcp_requires_the_native_oauth_mode_header(self):
+        """The posting endpoint only returns a 401 OAuth challenge when this header is sent."""
+        self.assertEqual(validator.AUTH_MODE_HEADERS, {"X-MCP-Auth-Mode": "oauth"})
+        shipped = json.loads((Path(__file__).resolve().parents[1] / "mcp.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            shipped,
+            {"mcpServers": {"so-me-studio": {"url": validator.ENDPOINT,
+                                             "headers": {"X-MCP-Auth-Mode": "oauth"}}}},
+        )
+        validator.validate_mcp(shipped)
 
     def test_mcp_rejects_an_additional_server(self):
         self.mcp["mcpServers"]["unexpected"] = {"url": "https://other.example.test/mcp"}

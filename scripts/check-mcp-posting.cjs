@@ -1,7 +1,7 @@
 // Credential-free deployment smoke test. Never creates a post or OAuth session.
 const assert = require('node:assert/strict');
 const expectedTools = [
-  'validate_post_media', 'list_posts', 'get_post', 'create_post', 'update_post',
+  'validate_post_media', 'get_media_rules', 'list_posts', 'get_post', 'create_post', 'update_post',
   'schedule_post', 'unschedule_post', 'delete_post', 'retry_post', 'get_calendar_posts',
   'list_drafts', 'get_draft', 'create_draft', 'update_draft', 'delete_draft', 'convert_draft',
   'list_accounts', 'get_account', 'list_media', 'search_media', 'get_media_file',
