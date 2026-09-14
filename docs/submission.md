@@ -34,7 +34,7 @@ No reviewer credentials are included in this public repository. Provision a revi
 - CI is configured for Ubuntu/Python 3.12 and Windows/Python 3.13. Its run status is visible in the repository Actions tab.
 - Public production discovery and unauthenticated access behavior are recorded in [live-checks.json](live-checks.json).
 - Authenticated Grok Bot login and posting have **not** been verified by those checks.
-- The production Cursor web OAuth callback currently fails registration with HTTP 400. The [live callback verification](callback-verification.json) must be repeated successfully after the callback fix is deployed.
+- The production callback fix is deployed. The [post-deployment callback verification](callback-after-deploy.json) passes: exact callback HTTP 201, spoofed hostname HTTP 400, no client secret issued.
 - Publisher application submission and marketplace approval are pending.
 
 Do not claim that anonymous tool discovery proves an authenticated installation works. Keep the pending items visible to the reviewer and complete the controlled acceptance run before representing this release as fully tested in Grok Bot.

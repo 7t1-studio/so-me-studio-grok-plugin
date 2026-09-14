@@ -20,7 +20,7 @@ class ValidationTests(unittest.TestCase):
         self.root = Path(self.directory.name).resolve()
         self.manifest = {"name": "test-plugin", "description": "A test plugin.", "version": "1.0.0",
                          "logo": "assets/logo.svg", "skills": "skills", "mcpServers": "mcp.json"}
-        self.mcp = {"mcpServers": {"so-me-studio": {"url": validator.ENDPOINT}}}
+        self.mcp = {"mcpServers": {"so-me-studio": {"url": validator.ENDPOINT, "headers": {"X-MCP-Auth-Mode": "oauth"}}}}
         self.write(".cursor-plugin/plugin.json", json.dumps(self.manifest))
         self.write("mcp.json", json.dumps(self.mcp))
         self.write("assets/logo.svg", '<svg xmlns="http://www.w3.org/2000/svg"/>')
@@ -99,6 +99,17 @@ class ValidationTests(unittest.TestCase):
         self.write("mcp.json", json.dumps(self.mcp))
         with self.assertRaisesRegex(validator.ValidationError, "exactly one MCP server"):
             validator.validate(self.root)
+
+    def test_mcp_requires_only_the_public_oauth_mode_header(self):
+        for headers in (None, {}, {"X-MCP-Auth-Mode": "anonymous"},
+                        {"X-MCP-Auth-Mode": "oauth", "Authorization": "Bearer private"},
+                        {"X-MCP-Auth-Mode": "oauth", "X-API-Key": "private"}):
+            with self.subTest(headers=headers):
+                self.write("mcp.json", json.dumps({"mcpServers": {"so-me-studio": {
+                    "url": validator.ENDPOINT, "headers": headers,
+                }}}))
+                with self.assertRaisesRegex(validator.ValidationError, "non-secret OAuth"):
+                    validator.validate(self.root)
 
     def test_symlink_escape_is_rejected_where_supported(self):
         with tempfile.TemporaryDirectory() as outside:

@@ -4,7 +4,7 @@ Draft, publish, and schedule social posts from Grok Bot using your connected So-
 
 This is a **Cursor-format plugin for Grok Bot**, maintained by 7t1 Studio. Grok Bot uses Cursor marketplace plugins ([connection guide](https://cursor.com/help/grok-bot/connect-plugins)). The package connects directly to So-me Studio's hosted MCP service; it does not run a new backend or require an xAI API key.
 
-**Release status:** version 1.0.0 is prepared for publisher review. Marketplace approval and an authenticated Grok Bot acceptance run are still pending. See [submission preparation](docs/submission.md), [OAuth readiness](docs/oauth-readiness.md), and [public endpoint evidence](docs/live-checks.json).
+**Release status:** version 1.0.1 is prepared for publisher review. Marketplace approval and an authenticated Grok Bot acceptance run are still pending. See [submission preparation](docs/submission.md), [OAuth readiness](docs/oauth-readiness.md), and [public endpoint evidence](docs/live-checks.json).
 
 ## What it includes
 
@@ -27,6 +27,7 @@ You need a So-me Studio workspace with API/MCP access, sufficient credits, and t
 | Transport | Streamable HTTP |
 | MCP URL | `https://api.so-me.studio/mcp/posting` |
 | Authentication | Browser OAuth with PKCE |
+| Non-secret connection header | `X-MCP-Auth-Mode: oauth` |
 | Scope | `mcp` |
 | Secrets included in package | None |
 

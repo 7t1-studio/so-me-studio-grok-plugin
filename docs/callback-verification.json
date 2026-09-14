@@ -10,7 +10,7 @@
   "secretIssued": false,
   "authenticatedSessionEstablished": false,
   "socialActionsPerformed": false,
-  "conclusion": "Production currently rejects registration of the documented Cursor/Grok Bot web callback. A callback fix must be deployed before repeating this test.",
+  "conclusion": "Historical pre-deployment result: production rejected registration of the documented callback at this timestamp. The fix was subsequently deployed; see callback-after-deploy.json for the successful repeat.",
   "secondaryEvidence": {
     "deploymentConfigurationMirrorContainsExtraRedirectSetting": false,
     "runtimeSshReadSucceeded": false

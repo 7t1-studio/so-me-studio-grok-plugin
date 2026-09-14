@@ -141,8 +141,10 @@ def validate_mcp(config):
     name, server = next(iter(servers.items()))
     require(isinstance(name, str) and bool(name), "MCP server name must be nonempty")
     require(isinstance(server, dict), "MCP server config must be an object")
-    require(set(server) <= {"url", "type"},
-            "MCP server must not bundle headers, credentials, environment variables or commands")
+    require(set(server) <= {"url", "type", "headers"},
+            "MCP server must not bundle credentials, environment variables or commands")
+    require(server.get("headers") == {"X-MCP-Auth-Mode": "oauth"},
+            "MCP headers must contain only the non-secret OAuth transport opt-in")
     require(server.get("url") == ENDPOINT, "MCP server must use the approved So-me Studio posting endpoint")
     require(server.get("type", "http") == "http", "MCP server transport must be HTTP")
 

@@ -1,0 +1,24 @@
+{
+  "checkedAtUtc": "2026-09-11T11:20:03.550Z",
+  "endpoint": "https://api.so-me.studio/oauth/register",
+  "callback": "https://www.cursor.com/agents/mcp/oauth/callback",
+  "mergeCommit": "89d27ae2b80fb772b23a6ce0ebf33a5c15d658ca",
+  "allowed": {
+    "status": 201,
+    "accepted": true,
+    "callbackMatches": true,
+    "clientRegistered": true,
+    "secretIssued": false,
+    "publicClient": true
+  },
+  "spoofedCallback": {
+    "status": 400,
+    "accepted": false,
+    "callbackMatches": false,
+    "clientRegistered": false,
+    "secretIssued": false,
+    "publicClient": false
+  },
+  "passed": true,
+  "authenticatedSessionEstablished": false
+}
