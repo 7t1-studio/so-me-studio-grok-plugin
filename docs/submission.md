@@ -31,6 +31,7 @@ No reviewer credentials are included in this public repository. Provision a revi
 
 - Local verification on September 11, 2026: package validation passed; all 18 offline unit tests passed on Windows/Python 3.12; the skill frontmatter validator passed.
 - A repeat public probe on September 11, 2026 at 09:59 UTC passed health, discovery, the exact 30-tool catalog, and anonymous account-access rejection.
+- That probe and [live-checks.json](live-checks.json) predate the 31-tool catalog and the `X-MCP-Auth-Mode: oauth` header. Re-run `node scripts/check-mcp-posting.cjs` after the backend deploys `get_media_rules`, and record the new result before submission.
 - CI is configured for Ubuntu/Python 3.12 and Windows/Python 3.13. Its run status is visible in the repository Actions tab.
 - Public production discovery and unauthenticated access behavior are recorded in [live-checks.json](live-checks.json).
 - Authenticated Grok Bot login and posting have **not** been verified by those checks.

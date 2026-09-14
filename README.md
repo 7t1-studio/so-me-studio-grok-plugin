@@ -4,17 +4,20 @@ Draft, publish, and schedule social posts from Grok Bot using your connected So-
 
 This is a **Cursor-format plugin for Grok Bot**, maintained by 7t1 Studio. Grok Bot uses Cursor marketplace plugins ([connection guide](https://cursor.com/help/grok-bot/connect-plugins)). The package connects directly to So-me Studio's hosted MCP service; it does not run a new backend or require an xAI API key.
 
-**Release status:** version 1.0.1 is prepared for publisher review. Marketplace approval and an authenticated Grok Bot acceptance run are still pending. See [submission preparation](docs/submission.md), [OAuth readiness](docs/oauth-readiness.md), and [public endpoint evidence](docs/live-checks.json).
+**Release status:** version 1.1.0 adds thread chains, the automatic first comment, typed TikTok options, measured media checks, and the required `X-MCP-Auth-Mode: oauth` header. It is prepared for publisher review. Marketplace approval and an authenticated Grok Bot acceptance run are still pending. See [submission preparation](docs/submission.md), [OAuth readiness](docs/oauth-readiness.md), and [public endpoint evidence](docs/live-checks.json).
 
 ## What it includes
 
 - Find connected accounts and platform-specific posting destinations.
 - Save/edit drafts and attach existing library media or uploaded images/videos.
-- Compare media compatibility across every requested destination before publication.
+- Compare media compatibility across every requested destination before publication, including pixel size, aspect ratio, codec, and frame rate.
+- Publish a multi-post chain on X, Threads, Bluesky, or Mastodon with `threadParts`.
+- Add an automatic first comment for hashtags or a link on the platforms that support one.
+- Collect the TikTok privacy level and interaction options from the creator before publication.
 - Publish now, schedule with a timezone, reschedule, or cancel upcoming posts.
 - Review the calendar and report actual publication status.
 
-The posting endpoint exposes 30 tools. Analytics, inbox messaging, account administration, bulk deletion, and AI image/video generation are outside this plugin. Supported formats and post types depend on the destination and workspace entitlements. Telegram and WhatsApp are outside the scheduler posting flow.
+The posting endpoint exposes 31 tools. Analytics, inbox messaging, account administration, bulk deletion, and AI image/video generation are outside this plugin. Supported formats and post types depend on the destination and workspace entitlements. Telegram and WhatsApp are outside the scheduler posting flow.
 
 ## Connect
 
@@ -29,7 +32,10 @@ You need a So-me Studio workspace with API/MCP access, sufficient credits, and t
 | Authentication | Browser OAuth with PKCE |
 | Non-secret connection header | `X-MCP-Auth-Mode: oauth` |
 | Scope | `mcp` |
+| Request header | `X-MCP-Auth-Mode: oauth` (not a secret) |
 | Secrets included in package | None |
+
+The `X-MCP-Auth-Mode: oauth` header in `mcp.json` is **required**. The posting endpoint returns an HTTP 401 OAuth challenge only to a client that sends this header, and Grok Bot needs that challenge to open its native OAuth prompt. Without the header Grok Bot fails the connection with `no_auth_link`. The header carries no credential, so the package still contains no secret. Cursor's MCP configuration supports a `headers` object for a remote server; the package validator accepts this one header and rejects every other header.
 
 The manifest and MCP configuration follow [Cursor's plugin reference](https://cursor.com/docs/reference/plugins). A manifest alone does not register an OAuth client. Maintainers must verify the [documented callback and resource requirements](docs/oauth-readiness.md) before marking the integration production-ready.
 
@@ -38,6 +44,8 @@ The manifest and MCP configuration follow [Cursor's plugin reference](https://cu
 - “Show my connected social accounts and posts scheduled this week.”
 - “Save this caption and attached image as a draft for my Facebook page.”
 - “Compare this video's compatibility with my Instagram and Facebook accounts.”
+- “Post this X thread: the hook, then three follow-up posts.”
+- “Publish this to Instagram and put the hashtags in the first comment.”
 - “Schedule this approved draft for September 20, 2026 at 10 AM Asia/Dhaka.”
 
 Writing a caption does not authorize publication. The skill preserves the user's specified content, destinations, and scheduling intent. It treats successful creation as queued until the service confirms publication, and checks ambiguous write failures before retrying.
@@ -73,7 +81,7 @@ With Node.js 18+ you can also rerun the public production probe:
 node scripts/check-mcp-posting.cjs
 ```
 
-It checks health, OAuth metadata, the exact 30-tool catalog, and denial of anonymous account access. It never registers an OAuth client, sends credentials, uploads media, or creates a post.
+It checks health, OAuth metadata, the exact 31-tool catalog, and denial of anonymous account access. It never registers an OAuth client, sends credentials, uploads media, or creates a post.
 
 For a Cursor local import, copy this repository's plugin files into `~/.cursor/plugins/local/so-me-studio`, reload Cursor, and check its components in Customize. Local imports must be allowed by your team's settings. See [official local testing instructions](https://cursor.com/docs/plugins#test-plugins-locally). Local import is not marketplace publication or proof of Grok Bot cloud installation.
 

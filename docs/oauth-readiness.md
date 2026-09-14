@@ -31,13 +31,32 @@ The deployed change retains registered-client validation: an unknown client or a
 
 The server also supports CIMD. Successful metadata discovery alone does not show which client-registration flow Grok Bot uses or prove that either flow completes.
 
+## Native OAuth mode header
+
+The posting endpoint returns the HTTP 401 OAuth challenge only to a client that sends the request header `X-MCP-Auth-Mode: oauth`. Backend PR #610 introduced this behaviour. `mcp.json` therefore declares the header on the `so-me-studio` server:
+
+```json
+{
+  "mcpServers": {
+    "so-me-studio": {
+      "url": "https://api.so-me.studio/mcp/posting",
+      "headers": {
+        "X-MCP-Auth-Mode": "oauth"
+      }
+    }
+  }
+}
+```
+
+The header is required for Grok Bot's native OAuth prompt. Earlier packages omitted it and Grok Bot refused the connection with `no_auth_link`. The value announces a mode; it is not a credential, and `scripts/validate_plugin.py` still rejects `Authorization`, `X-API-Key`, and every other header. Do not remove the header to "simplify" the configuration, and do not add a second one.
+
 ## Resource and authentication discovery
 
 Version 1.0.1 sends the non-secret header `X-MCP-Auth-Mode: oauth`. This opts into HTTP 401 challenges for unauthenticated protocol requests, including initialization, so native clients can discover and start OAuth. Keep this header when configuring a custom remote manually. It carries no identity, token, or permission; authentication, resource binding and workspace checks still apply. The opt-in requires the corresponding backend transport fix to be deployed.
 
 The backend binds OAuth tokens to one MCP resource. Authorization must select `resource=https://api.so-me.studio/mcp/posting` and scope `mcp`. In the inspected source, omitting the resource selects the full `/mcp` endpoint; that token is rejected by `/mcp/posting`. Token exchange and refresh cannot switch the selected resource. Reconnect specifically to the posting endpoint when an existing token belongs to another endpoint.
 
-Without the opt-in header, production allows anonymous protocol discovery: `tools/list` returns HTTP 200 with 30 public tool schemas and a `WWW-Authenticate` header. An anonymous `list_accounts` invocation returns an MCP error result with `_meta["mcp/www_authenticate"]` and no account data. Each tool declares the OAuth scope and a compatibility metadata mirror. This behavior supports clients that recognize in-chat authentication challenges. The live Grok Bot 0.47.0 test did not recognize that challenge: it showed the remote as Added, returned no account data, and native reauthentication reported `no_auth_link`. That result prompted the explicit HTTP OAuth mode above. The unmodified discovery behavior remains covered by regression tests for existing clients.
+Production currently allows anonymous protocol discovery: `tools/list` returns HTTP 200 with 31 public tool schemas and a `WWW-Authenticate` header. An anonymous `list_accounts` invocation returns an MCP error result with `_meta["mcp/www_authenticate"]` and no account data. Each tool declares the OAuth scope and a compatibility metadata mirror. This behavior was designed for clients that recognize in-chat authentication challenges. Public checks do **not** prove that Grok Bot recognizes this pattern and opens its native authentication flow. If Grok Bot lists tools but never offers authentication, inspect the client's MCP error and supported authentication behavior before changing the server or declaring success.
 
 The posting URL restricts the exposed tool catalog. It does not introduce a narrower OAuth scope. Existing workspace membership, API/MCP entitlement, connected-account state and credits still govern authenticated use.
 
