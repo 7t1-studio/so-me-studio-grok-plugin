@@ -1,6 +1,6 @@
 # Publisher submission preparation
 
-Prepared September 11, 2026. Target: **Grok Bot through the Cursor Marketplace**. Application: https://cursor.com/marketplace/publish
+Refreshed September 25, 2026. Target: **Grok Bot through the Cursor Marketplace**. Application: https://cursor.com/marketplace/publish
 
 ## Application copy
 
@@ -29,9 +29,8 @@ No reviewer credentials are included in this public repository. Provision a revi
 
 ## Current evidence and remaining checks
 
-- Local verification on September 11, 2026: package validation passed; all 18 offline unit tests passed on Windows/Python 3.12; the skill frontmatter validator passed.
-- A repeat public probe on September 11, 2026 at 09:59 UTC passed health, discovery, the exact 30-tool catalog, and anonymous account-access rejection.
-- That probe and [live-checks.json](live-checks.json) predate the 31-tool catalog and the `X-MCP-Auth-Mode: oauth` header. Re-run `node scripts/check-mcp-posting.cjs` after the backend deploys `get_media_rules`, and record the new result before submission.
+- Local verification on September 25, 2026: package validation and all 20 offline unit tests passed on Windows using the bundled Python runtime.
+- The refreshed public probe verifies health, OAuth discovery, the exact 31-tool catalog, anonymous account-access rejection, stateless transport, and the native HTTP 401 challenge with `X-MCP-Auth-Mode: oauth`. See [live-checks.json](live-checks.json).
 - CI is configured for Ubuntu/Python 3.12 and Windows/Python 3.13. Its run status is visible in the repository Actions tab.
 - Public production discovery and unauthenticated access behavior are recorded in [live-checks.json](live-checks.json).
 - Authenticated Grok Bot login and posting have **not** been verified by those checks.

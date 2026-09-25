@@ -1,6 +1,6 @@
 # OAuth readiness for Cursor and Grok Bot
 
-Checked 11 September 2026. The public production checks in [live-checks.json](live-checks.json) passed. They verify discovery and rejection of unauthenticated account access. They do not establish a successful Cursor or Grok Bot login.
+Public checks refreshed September 25, 2026. The production checks in [live-checks.json](live-checks.json) verify discovery, the exact 31-tool catalog, the native HTTP 401 challenge and rejection of unauthenticated account access. They do not establish a successful Cursor or Grok Bot login. Callback registration evidence below is from September 11, 2026.
 
 **Callback verified after deployment:** the exact documented Cursor web callback now registers successfully (HTTP 201, public client, no secret). A spoofed hostname is rejected with HTTP 400. The backend deployment completed successfully on September 11, 2026; see [callback-after-deploy.json](callback-after-deploy.json). The earlier HTTP 400 failure is retained in [callback-verification.json](callback-verification.json) as historical evidence. Dynamic registration alone does not establish an authenticated user session.
 

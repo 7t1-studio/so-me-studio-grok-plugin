@@ -31,6 +31,20 @@ async function checkMcpPosting(baseUrl = 'https://api.so-me.studio', fetchImpl =
   assert.ok(oauth.code_challenge_methods_supported?.includes('S256'), 'PKCE S256 missing');
   for (const key of ['authorization_endpoint', 'token_endpoint', 'registration_endpoint'])
     assert.equal(new URL(oauth[key]).origin, origin, `${key} points to a different origin`);
+  const nativeChallenge = await request('/mcp/posting', 401, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', Accept: 'application/json, text/event-stream',
+      'X-MCP-Auth-Mode': 'oauth',
+    },
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: {
+      protocolVersion: '2025-03-26', capabilities: {},
+      clientInfo: { name: 'so-me-studio-public-check', version: '1.0.0' },
+    } }),
+  });
+  assert.ok(nativeChallenge.headers.get('www-authenticate')?.includes(
+    `resource_metadata="${origin}${metadataPath}"`), 'Native OAuth resource challenge missing');
+  await nativeChallenge.arrayBuffer();
   async function rpc(method, params = {}) {
     const response = await request('/mcp/posting', 200, {
       method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' },
@@ -61,6 +75,7 @@ async function checkMcpPosting(baseUrl = 'https://api.so-me.studio', fetchImpl =
     checkedAtUtc: new Date().toISOString(), endpoint: `${origin}/mcp/posting`,
     health: 'ok', postingMetadata: 'ok', oauthDiscovery: 'ok',
     expectedToolCount: expectedTools.length, authenticationRequired: true,
+    nativeHttp401Challenge: true,
     statelessTransport: 'ok', authenticatedClientVerified: false,
   };
 }
