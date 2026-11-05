@@ -147,7 +147,7 @@ def validate_mcp(config):
     require(isinstance(server, dict), "MCP server config must be an object")
     require(set(server) <= {"url", "type", "headers"},
             "MCP server must not bundle credentials, environment variables or commands")
-    require(server.get("url") == ENDPOINT, "MCP server must use the approved So-me Studio posting endpoint")
+    require(server.get("url") == ENDPOINT, "MCP server must use the approved Social media studio posting endpoint")
     require(server.get("type", "http") == "http", "MCP server transport must be HTTP")
     require(server.get("headers") == AUTH_MODE_HEADERS,
             "MCP server must send exactly the non-secret OAuth mode header "

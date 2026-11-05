@@ -5,9 +5,8 @@ const expectedTools = [
   'schedule_post', 'unschedule_post', 'delete_post', 'retry_post', 'get_calendar_posts',
   'list_drafts', 'get_draft', 'create_draft', 'update_draft', 'delete_draft', 'convert_draft',
   'list_accounts', 'get_account', 'list_media', 'search_media', 'get_media_file',
-  'list_media_folders', 'presign_media_upload', 'list_pinterest_boards',
-  'list_reddit_subreddits', 'list_reddit_flairs', 'list_gmb_locations',
-  'list_discord_channels', 'list_slack_channels', 'get_tiktok_creator_info',
+  'list_media_folders', 'presign_media_upload', 'request_media_upload', 'get_media_upload',
+  'list_pinterest_boards', 'list_discord_channels', 'list_slack_channels', 'get_tiktok_creator_info',
 ];
 
 async function checkMcpPosting(baseUrl = 'https://api.so-me.studio', fetchImpl = fetch) {
@@ -39,7 +38,7 @@ async function checkMcpPosting(baseUrl = 'https://api.so-me.studio', fetchImpl =
     },
     body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: {
       protocolVersion: '2025-03-26', capabilities: {},
-      clientInfo: { name: 'so-me-studio-public-check', version: '1.0.0' },
+      clientInfo: { name: 'social-media-studio-public-check', version: '1.0.0' },
     } }),
   });
   assert.ok(nativeChallenge.headers.get('www-authenticate')?.includes(

@@ -1,20 +1,21 @@
 {
-  "name": "so-me-studio",
-  "version": "1.1.0",
-  "description": "Upload images and videos, then draft, publish, and schedule social posts with So-me Studio in Grok Bot.",
+  "name": "social-media-studio",
+  "version": "1.2.0",
+  "description": "Plan, schedule, and publish your brand's social media posts to the accounts connected in Social media studio, including X, Facebook, Instagram, LinkedIn, TikTok, YouTube, Threads, Pinterest, Bluesky, and Mastodon. Supports images, videos, thread chains, and automatic first comments on supported platforms.",
   "author": {
-    "name": "7t1 Studio / So-me Studio",
+    "name": "7t1 Studio / Social media studio",
     "email": "support@so-me.studio"
   },
   "homepage": "https://docs.so-me.studio/mcp/overview",
   "repository": "https://github.com/7t1-studio/so-me-studio-grok-plugin",
   "license": "MIT",
   "keywords": [
-    "so-me-studio",
     "social-media",
+    "social-media-marketing",
+    "social-media-scheduling",
+    "content-calendar",
     "posting",
-    "scheduling",
-    "drafts",
+    "social-media-studio",
     "grok-bot"
   ],
   "logo": "assets/icon.png",

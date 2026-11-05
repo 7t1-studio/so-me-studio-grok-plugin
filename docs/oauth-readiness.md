@@ -1,6 +1,6 @@
 # OAuth readiness for Cursor and Grok Bot
 
-Public checks refreshed September 25, 2026. The production checks in [live-checks.json](live-checks.json) verify discovery, the exact 31-tool catalog, the native HTTP 401 challenge and rejection of unauthenticated account access. They do not establish a successful Cursor or Grok Bot login. Callback registration evidence below is from September 11, 2026.
+Public checks refreshed November 5, 2026. The production checks in [live-checks.json](live-checks.json) verify discovery, the exact 30-tool catalog, the native HTTP 401 challenge and rejection of unauthenticated account access. They do not establish a successful Cursor or Grok Bot login. Callback registration evidence below is from September 11, 2026.
 
 **Callback verified after deployment:** the exact documented Cursor web callback now registers successfully (HTTP 201, public client, no secret). A spoofed hostname is rejected with HTTP 400. The backend deployment completed successfully on September 11, 2026; see [callback-after-deploy.json](callback-after-deploy.json). The earlier HTTP 400 failure is retained in [callback-verification.json](callback-verification.json) as historical evidence. Dynamic registration alone does not establish an authenticated user session.
 
@@ -29,16 +29,29 @@ https://www.cursor.com/agents/mcp/oauth/callback
 
 The deployed change retains registered-client validation: an unknown client or a client registered with another callback cannot authorize through the Cursor callback. The focused OAuth suite passes 63 tests, including 11 spoofed or modified callback variants. Both backend release-check jobs passed on the exact fix commit, covering unit and database tests, TypeScript, lint, website checks, and the production image smoke test. Deployment startup, health, MCP posting and public preview checks passed. Do not put this callback into a static-client shortcut or add guessed variants or broad domain wildcards.
 
+### Callbacks seen in the Grok Bot desktop app (November 5, 2026)
+
+The Windows Grok Bot app, version 0.78.5, contains these MCP OAuth callbacks:
+
+| Callback | Accepted by the backend today |
+| --- | --- |
+| `https://www.cursor.com/agents/mcp/oauth/callback` | Yes (exact match). The app's loopback retargeting keys off this value. |
+| `http://localhost:8787/callback`, plus fallback ports 18787, 28787 and 31787 | Yes (loopback rule, any port) |
+| `https://www.cursor.com/bot/mcp/oauth/callback` | **No** |
+| `grokbot://mcp/oauth/callback` | **No** |
+
+The strings show the callbacks exist, not which one Grok Bot sends when it connects a third-party server. **Observed November 5, 2026:** Grok Bot on grok.com registered by DCR and sent the `/agents/` callback for a custom server, and sign-in completed (see the [acceptance run](submission.md#results-november-5-2026)). If registration or authorization fails with a redirect error on the `/bot/` callback, add that one exact URI the same way as the `/agents/` callback, or put it in the `MCP_OAUTH_REDIRECT_URIS` environment variable (comma-separated exact URIs, applied when the backend container is recreated). Do not add a wildcard.
+
 The server also supports CIMD. Successful metadata discovery alone does not show which client-registration flow Grok Bot uses or prove that either flow completes.
 
 ## Native OAuth mode header
 
-The posting endpoint returns the HTTP 401 OAuth challenge only to a client that sends the request header `X-MCP-Auth-Mode: oauth`. Backend PR #610 introduced this behaviour. `mcp.json` therefore declares the header on the `so-me-studio` server:
+The posting endpoint returns the HTTP 401 OAuth challenge only to a client that sends the request header `X-MCP-Auth-Mode: oauth`. Backend PR #610 introduced this behaviour. `mcp.json` therefore declares the header on the `social-media-studio` server:
 
 ```json
 {
   "mcpServers": {
-    "so-me-studio": {
+    "social-media-studio": {
       "url": "https://api.so-me.studio/mcp/posting",
       "headers": {
         "X-MCP-Auth-Mode": "oauth"
@@ -56,13 +69,13 @@ Version 1.0.1 sends the non-secret header `X-MCP-Auth-Mode: oauth`. This opts in
 
 The backend binds OAuth tokens to one MCP resource. Authorization must select `resource=https://api.so-me.studio/mcp/posting` and scope `mcp`. In the inspected source, omitting the resource selects the full `/mcp` endpoint; that token is rejected by `/mcp/posting`. Token exchange and refresh cannot switch the selected resource. Reconnect specifically to the posting endpoint when an existing token belongs to another endpoint.
 
-Production currently allows anonymous protocol discovery: `tools/list` returns HTTP 200 with 31 public tool schemas and a `WWW-Authenticate` header. An anonymous `list_accounts` invocation returns an MCP error result with `_meta["mcp/www_authenticate"]` and no account data. Each tool declares the OAuth scope and a compatibility metadata mirror. This behavior was designed for clients that recognize in-chat authentication challenges. Public checks do **not** prove that Grok Bot recognizes this pattern and opens its native authentication flow. If Grok Bot lists tools but never offers authentication, inspect the client's MCP error and supported authentication behavior before changing the server or declaring success.
+Production currently allows anonymous protocol discovery: `tools/list` returns HTTP 200 with 30 public tool schemas and a `WWW-Authenticate` header. An anonymous `list_accounts` invocation returns an MCP error result with `_meta["mcp/www_authenticate"]` and no account data. Each tool declares the OAuth scope and a compatibility metadata mirror. This behavior was designed for clients that recognize in-chat authentication challenges. Public checks do **not** prove that Grok Bot recognizes this pattern and opens its native authentication flow. If Grok Bot lists tools but never offers authentication, inspect the client's MCP error and supported authentication behavior before changing the server or declaring success.
 
 The posting URL restricts the exposed tool catalog. It does not introduce a narrower OAuth scope. Existing workspace membership, API/MCP entitlement, connected-account state and credits still govern authenticated use.
 
 ## Client acceptance before submission
 
-1. Load this repository as a Cursor plugin using the current documented development flow and confirm that it discovers the `so-me-studio` MCP server. For Grok Bot, confirm availability in the intended plugin surface; local Cursor installation does not by itself prove Grok Bot availability.
+1. Load this repository as a Cursor plugin using the current documented development flow and confirm that it discovers the `social-media-studio` MCP server. For Grok Bot, confirm availability in the intended plugin surface; local Cursor installation does not by itself prove Grok Bot availability.
 2. Start the native Authenticate/Connect flow. Verify the actual callback and resource against the values above. Complete sign-in and consent in the service browser UI. Keep passwords, tokens, signed upload URLs and authorization codes out of repository files and review screenshots.
 3. Confirm the plugin appears installed and that a read-only `list_accounts` call succeeds in the intended workspace. Verify reconnect behavior after disconnecting the test connection, and test token refresh through the client when practical.
 4. Save and read back a clearly identified test draft to verify write behavior. Use an explicitly authorized test destination and content for scheduling, cancellation and publication acceptance. Do not report a queued post as published.
