@@ -80,6 +80,6 @@ Test records left in the Social media studio workspace: the X thread draft "Batc
 
 - November 5, 2026: package validation and all 20 offline unit tests pass (Python 3.14 in WSL). The public probe passes against production with the 30-tool catalog, OAuth discovery, the native HTTP 401 challenge with `X-MCP-Auth-Mode: oauth`, and denial of anonymous account access. See [live-checks.json](live-checks.json).
 - November 5, 2026: the in-app acceptance run above passed in Grok Bot.
-- Not submitted. Marketplace approval is pending.
+- Submitted through the x.ai form on November 6, 2026, listed for Grok, Grok Bot and Cursor. The form confirmed: "Thanks for submitting your plugin! We'll review it and follow up by email." Marketplace approval is pending; xAI replies to info@so-me.studio.
 
 Do not claim that anonymous tool discovery proves an authenticated installation works.
