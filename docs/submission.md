@@ -1,24 +1,24 @@
 # Marketplace submission preparation
 
-Refreshed November 5, 2026, for version 1.2.0. Target: the **Grok Bot marketplace**, which xAI shares with Cursor. Form: https://x.ai/bot/marketplace/submit-a-plugin. Submitting accepts Cursor's [Marketplace Publisher Terms](https://cursor.com/marketplace-publisher-terms). Every submission is reviewed before it is listed; xAI has not published review criteria or timelines.
+Refreshed November 6, 2026, for version 1.2.0. Target: the **Grok Bot marketplace**, which xAI shares with Cursor. Form: https://x.ai/bot/marketplace/submit-a-plugin. Submitting accepts Cursor's [Marketplace Publisher Terms](https://cursor.com/marketplace-publisher-terms). Every submission is reviewed before it is listed; xAI has not published review criteria or timelines.
 
 This replaces the September plan to apply through cursor.com/marketplace/publish.
 
 ## Form answers
 
-| Field | Prepared value |
+| Field | Value entered on November 6, 2026 |
 | --- | --- |
 | First name, last name | The publisher contact's name |
-| Work email | support@so-me.studio |
-| Organization name | 7t1 Studio |
-| Organization handle | `7t1-studio` (lowercase, no spaces; it is the public publisher ID) |
+| Work email | info@so-me.studio |
+| Organization name | Social Media Studio |
+| Organization handle | `social-media-studio` (lowercase, no spaces; it is the public publisher ID) |
 | Website URL | https://so-me.studio |
-| Logotype URL | `https://raw.githubusercontent.com/7t1-studio/so-me-studio-grok-plugin/<release-commit>/assets/logo-square.png` |
-| Where to list | Grok Bot and Cursor. Leave Grok (coming soon) off until it can be tested. |
+| Logotype URL | https://raw.githubusercontent.com/7t1-studio/so-me-studio-grok-plugin/17080d60f93ea7df18123abcaa6efdaf443c0136/assets/logo-square.png |
+| Where to list | Grok (coming soon), Grok Bot, and Cursor |
 | MCP server URL or public GitHub repository | https://github.com/7t1-studio/so-me-studio-grok-plugin |
-| Brief description | See below |
-| Testing instructions | See below |
-| "I've tested this plugin locally and in-app" | Tick only after the [in-app acceptance run](#in-app-acceptance-run) passes |
+| Brief description | See below (600-character limit) |
+| Testing instructions | See below (600-character limit) |
+| "I've tested this plugin locally and in-app" | Ticked after the [in-app acceptance run](#in-app-acceptance-run) passed |
 
 Submit the **GitHub repository**, not the bare MCP URL. The repository carries the skill and the `X-MCP-Auth-Mode: oauth` header that Grok Bot needs to open its sign-in; a bare URL would connect without that header and fail with `no_auth_link`.
 
@@ -30,21 +30,18 @@ Submit the **GitHub repository**, not the bare MCP URL. The repository carries t
 
 ### Testing instructions
 
-Paste this and replace the bracketed line with the review login. The login is kept out of this public repository.
+The form limits this field to 600 characters. The text below is about 475 characters plus the login line, which is kept out of this public repository. Reviewers post for real, so the steps name only the popular destinations: Facebook, X, and the LinkedIn page.
 
-> Social media studio posts to real social accounts, so please use this review workspace.
+> Add Social media studio, click Authorize and sign in with this login (email/password form):
+> [review login]
 >
-> Connect: add Social media studio, select Authorize on the connect card, and sign in to Social media studio with: [review login and password]. Select "Sign in & allow access". No email code or MFA is needed. The workspace has connected test accounts: X (@hisomestudio), Bluesky (hisomestudio.bsky.social), Mastodon (@somestudio), a Facebook page, and a LinkedIn page (so-me-0047).
->
-> 1. "Show my connected social accounts and what's scheduled next week." Read-only: lists the accounts above and the calendar.
-> 2. "Write a three-post X thread with tips for batching a week of social posts. Add 'Plan your week with Social media studio' as the first comment and save it as a draft. Don't publish it." One draft for @hisomestudio with two thread parts and the first comment. Nothing is published.
-> 3. "Before I upload it, check if my video spring-launch.mp4 (MP4, 1080x1920, 2 minutes, 120 MB, H.264, 30 fps) can go to Instagram Reels, TikTok, Facebook Reels and Bluesky." Read-only: Instagram and TikTok pass; Facebook Reels fails (over 90 seconds) and Bluesky fails (over 100 MiB), each with the fix.
-> 4. "Schedule 'New on our blog: 5 ways to plan a week of social posts in 30 minutes.' on my Mastodon account for next Monday at 9:00 AM UTC. Then take it off the schedule." The post is scheduled, then changes to Pending. Nothing is published.
-> 5. "Give me a link to upload an image from my computer, then save it as a Facebook draft with the caption 'Hello from Grok Bot'." The Bot returns an upload page (no sign-in, valid for one hour). After you upload a JPG or PNG and say done, it saves a Facebook image draft.
->
-> Out of scope: analytics, comment and inbox replies, Reddit, and Google Business Profile. The Bot should say so and post nothing.
+> Then ask Grok Bot:
+> 1. "Show my connected social accounts."
+> 2. "Create a post 'Testing Social media studio in Grok Bot' with the current time, and publish it now to Facebook, X and my LinkedIn page." Expect three live posts with links.
+> 3. "Schedule a post on X for tomorrow 9 AM, then unschedule it."
+> Please post only to Facebook, X (@hisomestudio) and the LinkedIn page (so-me-0047).
 
-The review login is the one used for the ChatGPT review (`reviewer-test-credentials.txt` in the private OpenAI submission backup). Reviewers who publish for real should use Facebook, X, or the LinkedIn page; automatic first comments are paused on LinkedIn.
+The current time keeps each reviewer's post unique, so X does not reject a repeat as a duplicate. The longer checks used for the November 5 acceptance run (thread draft, media check, upload link, out-of-scope request) are recorded under [Results](#results-november-5-2026).
 
 ## In-app acceptance run
 
@@ -83,6 +80,6 @@ Test records left in the Social media studio workspace: the X thread draft "Batc
 
 - November 5, 2026: package validation and all 20 offline unit tests pass (Python 3.14 in WSL). The public probe passes against production with the 30-tool catalog, OAuth discovery, the native HTTP 401 challenge with `X-MCP-Auth-Mode: oauth`, and denial of anonymous account access. See [live-checks.json](live-checks.json).
 - November 5, 2026: the in-app acceptance run above passed in Grok Bot.
-- Not submitted. Marketplace approval is pending.
+- Submitted through the x.ai form on November 6, 2026, listed for Grok, Grok Bot and Cursor. The form confirmed: "Thanks for submitting your plugin! We'll review it and follow up by email." Marketplace approval is pending; xAI replies to info@so-me.studio.
 
 Do not claim that anonymous tool discovery proves an authenticated installation works.
