@@ -20,7 +20,7 @@ class ValidationTests(unittest.TestCase):
         self.root = Path(self.directory.name).resolve()
         self.manifest = {"name": "test-plugin", "description": "A test plugin.", "version": "1.0.0",
                          "logo": "assets/logo.svg", "skills": "skills", "mcpServers": "mcp.json"}
-        self.mcp = {"mcpServers": {"so-me-studio": {"url": validator.ENDPOINT,
+        self.mcp = {"mcpServers": {"social-media-studio": {"url": validator.ENDPOINT,
                                                    "headers": dict(validator.AUTH_MODE_HEADERS)}}}
         self.write(".cursor-plugin/plugin.json", json.dumps(self.manifest))
         self.write("mcp.json", json.dumps(self.mcp))
@@ -97,7 +97,7 @@ class ValidationTests(unittest.TestCase):
         ]
         for server in variants:
             with self.subTest(keys=list(server)):
-                self.write("mcp.json", json.dumps({"mcpServers": {"so-me-studio": server}}))
+                self.write("mcp.json", json.dumps({"mcpServers": {"social-media-studio": server}}))
                 with self.assertRaises(validator.ValidationError):
                     validator.validate(self.root)
 
@@ -107,7 +107,7 @@ class ValidationTests(unittest.TestCase):
         shipped = json.loads((Path(__file__).resolve().parents[1] / "mcp.json").read_text(encoding="utf-8"))
         self.assertEqual(
             shipped,
-            {"mcpServers": {"so-me-studio": {"url": validator.ENDPOINT,
+            {"mcpServers": {"social-media-studio": {"url": validator.ENDPOINT,
                                              "headers": {"X-MCP-Auth-Mode": "oauth"}}}},
         )
         validator.validate_mcp(shipped)
@@ -123,7 +123,7 @@ class ValidationTests(unittest.TestCase):
                         {"X-MCP-Auth-Mode": "oauth", "Authorization": "Bearer private"},
                         {"X-MCP-Auth-Mode": "oauth", "X-API-Key": "private"}):
             with self.subTest(headers=headers):
-                self.write("mcp.json", json.dumps({"mcpServers": {"so-me-studio": {
+                self.write("mcp.json", json.dumps({"mcpServers": {"social-media-studio": {
                     "url": validator.ENDPOINT, "headers": headers,
                 }}}))
                 with self.assertRaisesRegex(validator.ValidationError, "non-secret OAuth"):

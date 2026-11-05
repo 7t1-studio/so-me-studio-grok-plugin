@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "so-me-studio": {
+    "social-media-studio": {
       "url": "https://api.so-me.studio/mcp/posting",
       "headers": {
         "X-MCP-Auth-Mode": "oauth"
